@@ -76,26 +76,27 @@ def daily_work(
         tili_needed_items_num_unit = tili_needed_items[event_name]
         to_9000 = core_num_to_get * core_needed_items_num_unit + tili_num_to_get * tili_needed_items_num_unit
         to_9000_without_tili = core_num_to_get * core_needed_items_num_unit
-        print(f"活动: {event_name}, 需要的道具数量: {to_9000}, 不考虑体力的情况下: {to_9000_without_tili}")
-        print(colored(f"当前道具数量: {items_num}", 'green'))
+        print(f"活动: {event_name}, 需要的材料数量: {to_9000}, 不考虑体力的情况下: {to_9000_without_tili}")
+        print(colored(f"当前材料数量: {items_num}", 'green'))
+        print(colored(f"需要的材料数量(考虑体力): {to_9000}, 不考虑体力的情况下: {to_9000_without_tili}", 'green'))
         print(colored(f"每天的收获数量: {every_day_harvest_num}", 'green'))
         necc_days = round((to_9000 - items_num) / every_day_harvest_num, 2)
         necc_days_without_tili = round((to_9000_without_tili - items_num) / every_day_harvest_num, 2)
         print(f"活动: {event_name}, 需要的天数: {necc_days}, 不考虑体力的情况下: {necc_days_without_tili}")
     else:
         to_9000 = core_num_to_get * core_needed_items_num_unit
-        print(f"活动: {event_name}, 需要的道具数量: {to_9000}")
-        print(colored(f"当前道具数量: {items_num}", 'green'))
+        print(f"活动: {event_name}, 需要的材料数量: {to_9000}")
+        print(colored(f"当前材料数量: {items_num}", 'green'))
+        print(colored(f"需要的材料数量: {to_9000}", 'green'))
         print(colored(f"每天的收获数量: {every_day_harvest_num}", 'green'))
         necc_days = round((to_9000 - items_num) / every_day_harvest_num, 2)
         # necc_days_without_tili = round((to_9000_without_tili - items_num) / every_day_harvest_num, 2)
         print(f"活动: {event_name}, 需要的天数: {necc_days}")
 
 if __name__ == "__main__":
-    items_num = 904 # 材料数量
+    items_num = 12658 # 材料数量
     core_num = 4 # 四倍或者探查符
     tili_num = 17 # 除了兽渊之外的活动体力次数
 
-    i = 2
-    event_name = ["魔道争锋", "兽渊", "云梦", "天地弈局", "虚天殿"][i]
-    daily_work(items_num, core_num, tili_num, event_name)
+    events = ["魔道争锋", "兽渊", "云梦", "天地弈局", "虚天殿"]
+    daily_work(items_num, core_num, tili_num, "云梦")

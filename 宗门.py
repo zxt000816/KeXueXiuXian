@@ -48,10 +48,10 @@ def zong_men(
     print(colored('获得目标物品需要的天数：', 'green'), round(necc_days_to_target_item, 2))
 
 if __name__ == "__main__":
-    weiwang_now = 24915
-    weiwang_next_level = 25600
-    gongxian_now = 8250
-    target_item_gongxian = 7500 + 5000
+    weiwang_now = 26625
+    weiwang_next_level = 51200
+    gongxian_now = 2730
+    target_item_gongxian = 10000
 
     zong_men(
         weiwang_now=weiwang_now,
