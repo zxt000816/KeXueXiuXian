@@ -94,10 +94,6 @@ def daily_work(
         print(f"活动: {event_name}, 需要的天数: {necc_days}")
 
 if __name__ == "__main__":
-    # items_num = 1796 # 材料数量
-    # core_num = 0 # 四倍或者探查符
-    # tili_num = 18 # 除了兽渊之外的活动体力次数
-
     events = ["魔道入侵", "兽渊", "云梦", "天地弈局", "虚天殿"]
     event_idx = input("请输入活动序号, 1: 魔道入侵, 2: 兽渊, 3: 云梦, 4: 天地弈局, 5: 虚天殿: ")
     event_idx = int(event_idx)
@@ -106,12 +102,11 @@ if __name__ == "__main__":
     print('\n', "=" * 25 + f"当前活动: {event}" + "=" * 25)
     items_num = int(input("请输入当前材料数量: "))
     if event == "兽渊":
-        core_num = int(input("请输入探查符数量: "))
-        tili_num = 0
-    else:
-        core_num = int(input("请输入四倍数量: "))
-        tili_num = int(input("请输入体力次数: "))
-
+        core_num = int(input("请输入探查符数量: ")) # 探查符
+        tili_num = 0 
+    else: 
+        core_num = int(input("请输入四倍数量: ")) # 四倍
+        tili_num = int(input("请输入体力次数: ")) # 活动体力次数
 
     daily_work(items_num, core_num, tili_num, event)
 
