@@ -54,8 +54,8 @@ faze_harvest_num = {
     "魔道争锋": 625,
     "兽渊": 1125,
     "云梦": 875,
-    "天地弈局": 2250
-    # "虚天殿": 待填充
+    "天地弈局": 2250,
+    "虚天殿": 2100
 }
 def daily_work(
     items_num: int,
@@ -94,9 +94,10 @@ def daily_work(
         print(f"活动: {event_name}, 需要的天数: {necc_days}")
 
 if __name__ == "__main__":
-    items_num = 12658 # 材料数量
-    core_num = 4 # 四倍或者探查符
-    tili_num = 17 # 除了兽渊之外的活动体力次数
+    items_num = 1796 # 材料数量
+    core_num = 0 # 四倍或者探查符
+    tili_num = 18 # 除了兽渊之外的活动体力次数
 
     events = ["魔道争锋", "兽渊", "云梦", "天地弈局", "虚天殿"]
-    daily_work(items_num, core_num, tili_num, "云梦")
+
+    daily_work(items_num, core_num, tili_num, "虚天殿")

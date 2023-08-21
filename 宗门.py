@@ -50,7 +50,7 @@ def zong_men(
 if __name__ == "__main__":
     weiwang_now = 26625
     weiwang_next_level = 51200
-    gongxian_now = 2730
+    gongxian_now = 5701
     target_item_gongxian = 10000
 
     zong_men(
