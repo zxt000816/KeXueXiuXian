@@ -61,7 +61,8 @@ def daily_work(
     items_num: int,
     core_num: int,
     tili_num: int,
-    event_name: str
+    event_name: str,
+    jiasu_num: int = 19
 ):
     if event_name not in events:
         raise ValueError(f"event_name must be one of {events}")
@@ -69,7 +70,7 @@ def daily_work(
     needed_core_num = event_core_num[event_name]
     core_num_to_get = needed_core_num - core_num
     core_needed_items_num_unit = event_core_needed_items[event_name]
-    every_day_harvest_num = hourly_harvest_num[event_name] * 24 + jiasu_harvest_num[event_name][-1] + faze_harvest_num[event_name]
+    every_day_harvest_num = hourly_harvest_num[event_name] * 24 + jiasu_harvest_num[event_name][jiasu_num-1] + faze_harvest_num[event_name]
 
     if event_name != "兽渊":
         tili_num_to_get = tili_num_info[event_name] - tili_num
@@ -95,20 +96,21 @@ def daily_work(
 
 if __name__ == "__main__":
     events = ["魔道入侵", "兽渊", "云梦", "天地弈局", "虚天殿"]
-    event_idx = input("请输入活动序号, 1: 魔道入侵, 2: 兽渊, 3: 云梦, 4: 天地弈局, 5: 虚天殿: ")
-    event_idx = int(event_idx)
+    # event_idx = input("请输入活动序号, 1: 魔道入侵, 2: 兽渊, 3: 云梦, 4: 天地弈局, 5: 虚天殿: ")
+    # event_idx = int(event_idx)
 
-    event = events[event_idx - 1]
-    print('\n', "=" * 25 + f"当前活动: {event}" + "=" * 25)
-    items_num = int(input("请输入当前材料数量: "))
-    if event == "兽渊":
-        core_num = int(input("请输入探查符数量: ")) # 探查符
-        tili_num = 0 
-    else: 
-        core_num = int(input("请输入四倍数量: ")) # 四倍
-        tili_num = int(input("请输入体力次数: ")) # 活动体力次数
+    # event = events[event_idx - 1]
+    # print('\n', "=" * 25 + f"当前活动: {event}" + "=" * 25)
+    # items_num = int(input("请输入当前材料数量: "))
+    # if event == "兽渊":
+    #     core_num = int(input("请输入探查符数量: ")) # 探查符
+    #     tili_num = 0 
+    # else: 
+    #     core_num = int(input("请输入四倍数量: ")) # 四倍
+    #     tili_num = int(input("请输入体力次数: ")) # 活动体力次数
 
-    daily_work(items_num, core_num, tili_num, event)
+    # daily_work(items_num, core_num, tili_num, event)
 
-    # for event in events:
-    #     daily_work(0, 0, 0, event)
+    for event in events:
+        print('\n', "=" * 25 + f"当前活动: {event}" + "=" * 25)
+        daily_work(0, 0, 0, event, 19)

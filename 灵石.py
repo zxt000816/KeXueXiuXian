@@ -1,3 +1,5 @@
+from termcolor import colored
+
 ################# 灵石消费 #################
 ## 经验
 jingyan_needed_lingshi = 100 + 150
@@ -26,8 +28,6 @@ def task_lingshi_expectation_by_times():
         every_day_cost = sum(task_needed_lingshi[:i+1])
         print("刷新", i+1, "次任务需要", every_day_cost, "灵石")
 
-
-
 ## 神物园
 # 19次加速
 shenwuyuan_needed_lingshi = 756
@@ -55,12 +55,13 @@ if __name__ == '__main__':
     everyday_cost_laman = everyday_cost_qifu_laman + everyday_cost_task
 
     consider_exp_lingshi = True
-    print(f"拉满的话每天消耗{everyday_cost_laman}灵石 ({everyday_cost_qifu_laman}灵石祈福，{everyday_cost_task}灵石任务)", '\n')
-    print(f"经济祈福的话每天消耗{everyday_cost}灵石 ({everyday_cost_qifu_economic}灵石祈福，{everyday_cost_task}灵石任务)", '\n')
+    print(colored(f"拉满的话每天消耗{everyday_cost_laman}灵石 ({everyday_cost_qifu_laman}灵石祈福，{everyday_cost_task}灵石任务)", "green"))
+    print(colored(f"经济祈福的话每天消耗{everyday_cost}灵石 ({everyday_cost_qifu_economic}灵石祈福，{everyday_cost_task}灵石任务)", "green"), '\n')
     if consider_exp_lingshi:
-        print(f"考虑经验并且拉满的话每天消耗{everyday_cost_laman + jingyan_needed_lingshi}灵石 ({everyday_cost_qifu_laman}灵石祈福，{everyday_cost_task}灵石任务，{jingyan_needed_lingshi}灵石经验)", '\n')
-        print(f"考虑经验并且经济祈福的话每天消耗{everyday_cost + jingyan_needed_lingshi}灵石 ({everyday_cost_qifu_economic}灵石祈福，{everyday_cost_task}灵石任务，{jingyan_needed_lingshi}灵石经验)", '\n')
+        print(colored(f"考虑经验并且拉满的话每天消耗{everyday_cost_laman + jingyan_needed_lingshi}灵石 ({everyday_cost_qifu_laman}灵石祈福，{everyday_cost_task}灵石任务，{jingyan_needed_lingshi}灵石经验)", "green"))
+        print(colored(f"考虑经验并且经济祈福的话每天消耗{everyday_cost + jingyan_needed_lingshi}灵石 ({everyday_cost_qifu_economic}灵石祈福，{everyday_cost_task}灵石任务，{jingyan_needed_lingshi}灵石经验)", "green"), '\n')
     
     everyday_get = get_lingshi()
-    print("每天获得", everyday_get, "灵石")
-    print("经济祈福每天能够省下来", everyday_get - everyday_cost_qifu_economic, "灵石")
+    print(colored(f"每天获得{everyday_get}灵石", "red"))
+    print(colored(f"拉满每天能够省下来{everyday_get - everyday_cost_qifu_laman}灵石", "red"))
+    print(colored(f"经济祈福每天能够省下来{everyday_get - everyday_cost_qifu_economic}灵石", "red"))
