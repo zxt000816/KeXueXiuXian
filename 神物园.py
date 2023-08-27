@@ -8,7 +8,7 @@ from typing import List, Dict, Tuple, Union
 
 events = ["魔道入侵", "兽渊", "云梦", "天地弈局", "虚天殿"]
 event_core_num = {
-    "魔道入侵": 35,
+    "魔道入侵": 29,
     "兽渊": 90,
     "云梦": 40,
     "天地弈局": 80,
@@ -22,7 +22,7 @@ event_core_needed_items = {
     "虚天殿": 900
 }
 tili_num_info = {
-    "魔道入侵": 35,
+    "魔道入侵": 29,
     "云梦": 40,
     "天地弈局": 80,
     "虚天殿": 38
@@ -96,21 +96,14 @@ def daily_work(
 
 if __name__ == "__main__":
     events = ["魔道入侵", "兽渊", "云梦", "天地弈局", "虚天殿"]
-    # event_idx = input("请输入活动序号, 1: 魔道入侵, 2: 兽渊, 3: 云梦, 4: 天地弈局, 5: 虚天殿: ")
-    # event_idx = int(event_idx)
 
-    # event = events[event_idx - 1]
-    # print('\n', "=" * 25 + f"当前活动: {event}" + "=" * 25)
-    # items_num = int(input("请输入当前材料数量: "))
-    # if event == "兽渊":
-    #     core_num = int(input("请输入探查符数量: ")) # 探查符
-    #     tili_num = 0 
-    # else: 
-    #     core_num = int(input("请输入四倍数量: ")) # 四倍
-    #     tili_num = int(input("请输入体力次数: ")) # 活动体力次数
-
-    # daily_work(items_num, core_num, tili_num, event)
+    items_num_dict = {"魔道入侵": 453, "兽渊": 79,  "云梦": 708, "天地弈局": 2532,  "虚天殿": 552} # 材料数量
+    core_num_dict = {"魔道入侵": 0, "兽渊": 27, "云梦": 1, "天地弈局": 3, "虚天殿": 0} # 四倍数量
+    tili_num_dict = {"魔道入侵": 0, "兽渊": 0, "云梦": 3, "天地弈局": 0, "虚天殿": 3} # 活动体力次数
 
     for event in events:
+        items_num = items_num_dict[event]
+        core_num = core_num_dict[event]
+        tili_num = tili_num_dict[event]
         print('\n', "=" * 25 + f"当前活动: {event}" + "=" * 25)
-        daily_work(0, 0, 0, event, 19)
+        daily_work(items_num, core_num, tili_num, event, 19)
