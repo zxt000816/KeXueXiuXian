@@ -6,10 +6,10 @@
 from termcolor import colored
 
 current_score = 6010
-current_rank_score = 6000
+current_rank_score = 28310
 
 target_score = 9000
-target_rank_score = 15000
+target_rank_score = 31000
 
 target_score_need_core_item_num = (target_score - current_score) / 240
 target_rank_score_need_core_item_num = (target_rank_score - current_rank_score) / 300
