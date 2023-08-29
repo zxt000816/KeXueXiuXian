@@ -6,7 +6,7 @@ from typing import List, Dict, Tuple, Union
 events = ["魔道入侵", "兽渊探秘", "云梦试剑", "天地弈局", "虚天殿"]
 event_core_num = {
     "魔道入侵": 29,
-    "兽渊探秘": 90,
+    "兽渊探秘": 80,
     "云梦试剑": 40,
     "天地弈局": 80,
     "虚天殿": 38
