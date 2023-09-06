@@ -1,20 +1,24 @@
 """
-金色怪物: 50点积分, 50点纳元晶 (4倍: 200点积分, 200点纳元晶)
-红色怪物: 75点积分, 60点纳元晶 (4倍: 300点积分, 240点纳元晶)
+金色怪物: 195点积分, 80点魔晶 (4倍: 780点积分, 320点魔晶)
 """
 
 from termcolor import colored
 
-current_score = 6010
-current_rank_score = 33480
+current_score = 3960
+current_rank_score = 9585
 
 target_score = 9000
-target_rank_score = 45460
+target_rank_score = 41437.5
 
-target_score_need_core_item_num = (target_score - current_score) / 240
-target_rank_score_need_core_item_num = (target_rank_score - current_rank_score) / 300
+target_score_need_core_item_num = (target_score - current_score) / 320
+target_rank_score_need_core_item_num = (target_rank_score - current_rank_score) / 780
 
-print(colored(f"达到{target_score}纳元晶需要的四倍的数量: {target_score_need_core_item_num}", 'green'))
+print(
+    colored(
+        f"达到{target_score}纳元晶需要的四倍的数量: {target_score_need_core_item_num}. 买到灵根后, 积分将达到: {current_rank_score + target_score_need_core_item_num * 780}", 
+        'green'
+    )
+)
 print(colored(f"达到{target_rank_score}点积分需要的四倍的数量: {target_rank_score_need_core_item_num}", 'green'))
 
 # target_score_need_item_num = (target_score - current_score) / 60

@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import re
+from tabulate import tabulate
 from event_items import daily_work
 
 date_events = [
@@ -14,6 +15,14 @@ date_events = [
     {'date': '2023-09-01', 'event': '丹道问鼎跨服[2]*E;升仙会跨服[2]*E'},
     {'date': '2023-09-02', 'event': '云梦试剑跨服[2]*E'},
     {'date': '2023-09-03', 'event': '魔道入侵预赛*E;炼体法相预赛*E'},
+    {'date': '2023-09-04', 'event': '魔道入侵跨服[2]*E'},
+    {'date': '2023-09-05', 'event': '炼体法相跨服[4]*E'},
+    {'date': '2023-09-06', 'event': '虚天殿跨服[2]*E;灵宠竞武跨服[2]*S'},
+    {'date': '2023-09-07', 'event': '灵宠竞武跨服[2]*E;天地弈局预赛*E'},
+    {'date': '2023-09-08', 'event': '天地弈局跨服[4]*E;丹道问鼎跨服[2]*S'},
+    {'date': '2023-09-09', 'event': '丹道问鼎跨服[2]*E'},
+    {'date': '2023-09-10', 'event': '云梦试剑跨服[2]*E;炼体法相跨服[2]*S'},
+    {'date': '2023-09-11', 'event': '炼体法相跨服[2]*E;升仙会跨服[2]*E'},
 ]
 
 date_events_df = pd.DataFrame(date_events)
@@ -34,7 +43,7 @@ event_last_date = {
     '灵宠竞武': event1_template.copy(),
 }
 
-event_regex = r'(?P<event_name>魔道入侵|虚天殿|天地弈局|兽渊探秘|云梦试剑|升仙会|丹道问鼎|瑶池花会|炼体法相|灵宠竞武)'
+event_regex = r'(?P<event_name>魔道入侵|虚天殿|天地弈局|兽渊探秘|云梦试剑|升仙会|丹道问鼎|瑶池花会|炼体法相|灵宠竞武|丹道问鼎)'
 event_type_regex = r'(?P<event_type>预赛|跨服\[2\]|跨服\[4\]|跨服\[8\])'
 event_time_regex = r'(?P<event_time>\*S|\*E)'
 
@@ -80,22 +89,27 @@ results_df = pd.DataFrame(results).dropna()
 results_df['event_last_days'] = results_df['event_last_days'].astype(int)
 results_df = results_df[results_df['event_name'].isin(linggen_events)]
 
-future_events = results_df[results_df['event_last_days'] > 0].sort_values(by=['event_last_days'], ascending=True)
+future_events = results_df[results_df['event_last_days'] >= 0].sort_values(by=['event_last_days'], ascending=True)
 past_events = results_df[results_df['event_last_days'] < 0].sort_values(by=['event_last_days'], ascending=False)
 
 ###########################################################################
 
-items_num_dict = {"魔道入侵": 133, "兽渊探秘": 185,  "云梦试剑": 718, "天地弈局": 2092,  "虚天殿": 572} # 材料数量
-core_num_dict = {"魔道入侵": 5, "兽渊探秘": 62, "云梦试剑": 2, "天地弈局": 6, "虚天殿": 1} # 四倍数量
-tili_num_dict = {"魔道入侵": 3, "兽渊探秘": 0, "云梦试剑": 0, "天地弈局": 0, "虚天殿": 0} # 活动体力次数
+items_num_dict = {"魔道入侵": 401, "兽渊探秘": 1165,  "云梦试剑": 2240, "天地弈局": 3636,  "虚天殿": 364} # 材料数量
+core_num_dict = {"魔道入侵": 0, "兽渊探秘": 0, "云梦试剑": 3, "天地弈局": 9, "虚天殿": 6} # 四倍数量
+tili_num_dict = {"魔道入侵": 0, "兽渊探秘": 0, "云梦试剑": 0, "天地弈局": 0, "虚天殿": 0} # 活动体力次数
 
 cost_days = 0
+# events_want_to_confirm = ["魔道入侵", "兽渊探秘", "云梦试剑", "天地弈局", "虚天殿"]
+events_want_to_confirm = ["魔道入侵", "兽渊探秘", "云梦试剑", "天地弈局"]
+print(tabulate(future_events, headers='keys', tablefmt='psql'))
 for future_event in future_events.itertuples(index=True):
     idx, event_name, event_type, event_date, event_last_days = future_event
+    if event_name not in events_want_to_confirm:
+        continue
     items_num = items_num_dict[event_name]
     core_num = core_num_dict[event_name]
     tili_num = tili_num_dict[event_name]
-    inference = daily_work(items_num, core_num, tili_num, event_name)
+    inference = daily_work(items_num, core_num, tili_num, event_name, 23)
     
     print("=" * 100)
     print(f"活动: {event_name}, 类型: {event_type}, 还剩: {event_last_days}天, 日期: {event_date}")
@@ -105,5 +119,3 @@ for future_event in future_events.itertuples(index=True):
         print(f"{key}: {value}")
     
     cost_days = event_last_days
-
-    
