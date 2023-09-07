@@ -43,14 +43,14 @@ def cal_core_num_to_target_qiyu(
     print(colored(f"想要达到棋玉数量{target_qiyu}, 需要四倍数量: {round(need_si_bei_num, 2)}", "green"))
 
 if __name__ == "__main__":
-    qifu_num = 3915 # 个人棋符数量
-    target_qifu = 19322 # 目标个人棋符数量
-    qifu_per_time = 71 # 每次挑战获得的个人棋符数量
-    sibei_num = 3
+    qifu_num = 5243 # 个人棋符数量
+    target_qifu = 7563 # 目标个人棋符数量
+    qifu_per_time = 88 # 每次挑战获得的个人棋符数量
+    sibei_num = 0
     cal_tili_num_to_target_qifu(
         qifu_num=qifu_num,
         target_qifu=target_qifu,
-        tili_num=2,
+        tili_num=0,
         qifu_per_time=qifu_per_time
     )
 
@@ -61,12 +61,12 @@ if __name__ == "__main__":
         sibei_num=sibei_num
     )
 
-    # qiyu_num = 1686 # 棋玉数量
-    # target_qiyu = 9000 # 目标棋玉数量
-    # qiyu_per_time = 30 # 每次挑战获得的棋玉数量
-    # cal_core_num_to_target_qiyu(
-    #     qiyu_num=qiyu_num,
-    #     target_qiyu=target_qiyu,
-    #     qiyu_per_time=qiyu_per_time,
-    #     sibei_num=sibei_num
-    # )
+    qiyu_num = 1686 # 棋玉数量
+    target_qiyu = 9000 # 目标棋玉数量
+    qiyu_per_time = 30 # 每次挑战获得的棋玉数量
+    cal_core_num_to_target_qiyu(
+        qiyu_num=qiyu_num,
+        target_qiyu=target_qiyu,
+        qiyu_per_time=qiyu_per_time,
+        sibei_num=sibei_num
+    )
