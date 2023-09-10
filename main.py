@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from event_items import daily_work
 
 class MainApp:
     def __init__(self, root):
@@ -97,30 +98,51 @@ class Page(tk.Frame):
         values = [field.get() for field in self.input_fields]
         selected_activity = self.activity_combobox.get()
         # Do something with values and selected_activity
-
+        print("Values:", values)
+        print("Selected activity:", selected_activity)
 
 class ShouYuan(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        labels = ["探查符数量 (默认为0)：", "材料数量 (默认为0)："]
-        self.entries = []
+        labels = ["材料数量(默认为0)：", "探查符数量(默认为0)：", "神物园加速次数(默认为19)："]
+        self.entries = {}
 
         for i, label in enumerate(labels):
             self.label = tk.Label(self, text=label)
             self.label.grid(row=i, column=0)
 
             entry = tk.Entry(self)
+            if i == 2:
+                entry.insert(0, 19)
+            else:
+                entry.insert(0, 0)
+
             entry.grid(row=i, column=1)
-            self.entries.append(entry)
+            self.entries[label] = entry
 
         self.button = ttk.Button(self, text="提交", command=self.submit)
         self.button.grid(row=len(labels)+1, column=0, columnspan=2, sticky=tk.E+tk.W, padx=10, pady=10)
 
     def submit(self):
-        values = [entry.get() for entry in self.entries]
-        # Do something with values
+        values = {label: int(entry.get()) for label, entry in self.entries.items()}
+        shouyuan_info = daily_work(
+            items_num=values["材料数量(默认为0)："],
+            core_num=values["探查符数量(默认为0)："],
+            tili_num=0,
+            event_name="兽渊探秘",
+            jiasu_num=values["神物园加速次数(默认为19)："]
+        )
+
+        popup = tk.Toplevel()
+        popup.title("兽渊探秘")
+
+        label = tk.Label(
+            popup, 
+            text=f"活动: {shouyuan_info['活动']}\n需要的材料数量: {shouyuan_info['需要的材料数量']}\n需要的探查符数量: {shouyuan_info['需要的探查符数量']}\n当前材料数量: {shouyuan_info['当前材料数量']}\n每天的收获数量: {shouyuan_info['每天的收获数量']}\n需要的天数: {shouyuan_info['需要的天数']}"
+        )
+        label.pack()
 
 if __name__ == "__main__":
     root = tk.Tk()

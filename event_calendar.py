@@ -24,6 +24,9 @@ date_events = [
     {'date': '2023-09-10', 'event': '云梦试剑跨服[2]*E;炼体法相跨服[2]*S'},
     {'date': '2023-09-11', 'event': '炼体法相跨服[2]*E;升仙会跨服[2]*E'},
     {'date': '2023-09-12', 'event': '魔道入侵预赛*E'},
+    {'date': '2023-09-13', 'event': '魔道入侵跨服[2]*E;瑶池花会跨服[2]*S'},
+    {'date': '2023-09-14', 'event': '瑶池花会跨服[2]*E;兽渊探秘跨服[4]*S'},
+    {'date': '2023-09-15', 'event': '兽渊探秘跨服[4]*E'},
 ]
 
 date_events_df = pd.DataFrame(date_events)
@@ -95,13 +98,13 @@ past_events = results_df[results_df['event_last_days'] < 0].sort_values(by=['eve
 
 ###########################################################################
 
-items_num_dict = {"魔道入侵": 529, "兽渊探秘": 1421,  "云梦试剑": 6746, "天地弈局": 4148,  "虚天殿": 748} # 材料数量
-core_num_dict = {"魔道入侵": 1, "兽渊探秘": 5, "云梦试剑": 6, "天地弈局": 9, "虚天殿": 17} # 四倍数量
+items_num_dict = {"魔道入侵": 55, "兽渊探秘": 208,  "云梦试剑": 410, "天地弈局": 572,  "虚天殿": 316} # 材料数量
+core_num_dict = {"魔道入侵": 6, "兽渊探秘": 16, "云梦试剑": 40, "天地弈局": 18, "虚天殿": 18} # 四倍数量
 tili_num_dict = {"魔道入侵": 0, "兽渊探秘": 0, "云梦试剑": 0, "天地弈局": 0, "虚天殿": 0} # 活动体力次数
 
 cost_days = 0
 # events_want_to_confirm = ["魔道入侵", "兽渊探秘", "云梦试剑", "天地弈局", "虚天殿"]
-events_want_to_confirm = ["魔道入侵", "云梦试剑", ]
+events_want_to_confirm = ["魔道入侵", "云梦试剑", "兽渊探秘", ]
 print(tabulate(future_events, headers='keys', tablefmt='psql'))
 for future_event in future_events.itertuples(index=True):
     idx, event_name, event_type, event_date, event_last_days = future_event
