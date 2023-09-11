@@ -74,33 +74,22 @@ def daily_work(
         tili_needed_items_num_unit = tili_needed_items[event_name]
         to_9000 = core_num_to_get * core_needed_items_num_unit + tili_num_to_get * tili_needed_items_num_unit
         to_9000_without_tili = core_num_to_get * core_needed_items_num_unit
-        # print(f"活动: {event_name}, 需要的材料数量: {to_9000}, 不考虑体力的情况下: {to_9000_without_tili}")
-        # print(colored(f"当前材料数量: {items_num}", 'green'))
-        # print(colored(f"需要的材料数量(考虑体力): {to_9000}, 不考虑体力的情况下: {to_9000_without_tili}", 'green'))
-        # print(colored(f"每天的收获数量: {every_day_harvest_num}", 'green'))
         necc_days = round((to_9000 - items_num) / every_day_harvest_num, 2)
         necc_days_without_tili = round((to_9000_without_tili - items_num) / every_day_harvest_num, 2)
-        # print(f"活动: {event_name}, 需要的天数: {necc_days}, 不考虑体力的情况下: {necc_days_without_tili}")
 
         return {
             "活动": event_name,
             "需要的材料数量": to_9000,
+            "需要的材料数量(不考虑体力)": to_9000_without_tili,
             "需要的四倍数量": core_num_to_get,
-            "不考虑体力的情况下": to_9000_without_tili,
             "当前材料数量": items_num,
             "每天的收获数量": every_day_harvest_num,
             "需要的天数": necc_days,
-            "不考虑体力的情况下需要的天数": necc_days_without_tili
+            "需要的天数(不考虑体力)": necc_days_without_tili
         }
     else:
         to_9000 = core_num_to_get * core_needed_items_num_unit
-        # print(f"活动: {event_name}, 需要的材料数量: {to_9000}")
-        # print(colored(f"当前材料数量: {items_num}", 'green'))
-        # print(colored(f"需要的材料数量: {to_9000}", 'green'))
-        # print(colored(f"每天的收获数量: {every_day_harvest_num}", 'green'))
         necc_days = round((to_9000 - items_num) / every_day_harvest_num, 2)
-        # necc_days_without_tili = round((to_9000_without_tili - items_num) / every_day_harvest_num, 2)
-        # print(f"活动: {event_name}, 需要的天数: {necc_days}")
         return {
             "活动": event_name,
             "需要的材料数量": to_9000,

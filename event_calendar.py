@@ -26,7 +26,9 @@ date_events = [
     {'date': '2023-09-12', 'event': '魔道入侵预赛*E'},
     {'date': '2023-09-13', 'event': '魔道入侵跨服[2]*E;瑶池花会跨服[2]*S'},
     {'date': '2023-09-14', 'event': '瑶池花会跨服[2]*E;兽渊探秘跨服[4]*S'},
-    {'date': '2023-09-15', 'event': '兽渊探秘跨服[4]*E'},
+    {'date': '2023-09-15', 'event': '兽渊探秘跨服[4]*E;丹道问鼎预赛*E'},
+    {'date': '2023-09-16', 'event': '社团大比跨服[2]*E'},
+    {'date': '2023-09-17', 'event': '丹道问鼎跨服[8]*E'},
 ]
 
 date_events_df = pd.DataFrame(date_events)
@@ -41,13 +43,14 @@ event_last_date = {
     '兽渊探秘': event1_template.copy(),
     '云梦试剑': event1_template.copy(),
     '升仙会': event1_template.copy(),
+    '社团大比': event1_template.copy(),
     '丹道问鼎': event1_template.copy(),
     '瑶池花会': event1_template.copy(),
     '炼体法相': event1_template.copy(),
     '灵宠竞武': event1_template.copy(),
 }
 
-event_regex = r'(?P<event_name>魔道入侵|虚天殿|天地弈局|兽渊探秘|云梦试剑|升仙会|丹道问鼎|瑶池花会|炼体法相|灵宠竞武|丹道问鼎)'
+event_regex = r'(?P<event_name>魔道入侵|虚天殿|天地弈局|兽渊探秘|云梦试剑|升仙会|社团大比|丹道问鼎|瑶池花会|炼体法相|灵宠竞武|丹道问鼎)'
 event_type_regex = r'(?P<event_type>预赛|跨服\[2\]|跨服\[4\]|跨服\[8\])'
 event_time_regex = r'(?P<event_time>\*S|\*E)'
 
