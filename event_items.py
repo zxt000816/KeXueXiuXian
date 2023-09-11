@@ -1,8 +1,3 @@
-from termcolor import colored
-import math
-import matplotlib.pyplot as plt
-from typing import List, Dict, Tuple, Union
-
 events = ["魔道入侵", "兽渊探秘", "云梦试剑", "天地弈局", "虚天殿"]
 event_core_num = {
     "魔道入侵": 29,
