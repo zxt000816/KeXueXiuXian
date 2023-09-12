@@ -2,12 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter.font as tkFont
 from event_items import daily_work
+from chong_bang import chong_bang
 
 class MainApp:
     def __init__(self, root):
         self.root = root
         self.root.title('凡人修仙传人界篇')
-        self.root.geometry('600x500')  # Set the size of the window
+        self.root.geometry('400x500')  # Set the size of the window
 
         # Define the font
         font = tkFont.Font(family="Arial")
@@ -22,13 +23,13 @@ class MainApp:
         self.notebook.pack(fill='both', expand=True)
 
         self.pages = {}
-        page_names = ["日程规划", "兽渊探秘", "魔道入侵/天地弈局/云梦试剑/虚天殿"]
+        page_names = ["日程规划", "灵根获取", "冲榜"]
         
         for page_name in page_names:
             if page_name == "日程规划":
                 frame = Calendar(parent=self.notebook, controller=self)
-            elif page_name == "兽渊探秘":
-                frame = ShouYuan(parent=self.notebook, controller=self)
+            elif page_name == "冲榜":
+                frame = ChongBang(parent=self.notebook, controller=self)
             else:
                 frame = Page(parent=self.notebook, controller=self)
 
@@ -110,7 +111,7 @@ class Calendar(tk.Frame):
 
         popup = tk.Toplevel()
         popup.title("日程规划")
-        popup.geometry("400x800")
+        popup.geometry("400x500")
 
         scrollbar = tk.Scrollbar(popup)
         canvas = tk.Canvas(popup, yscrollcommand=scrollbar.set)
@@ -154,14 +155,13 @@ class Page(tk.Frame):
         self.controller = controller
 
         # Create combobox for activity selection
-        combobox = ttk.Combobox(self, values=["魔道入侵", "天地弈局", "云梦试剑", "虚天殿"], font=("Arial", 12))
+        combobox = ttk.Combobox(self, values=["魔道入侵", "兽渊探秘", "天地弈局", "云梦试剑", "虚天殿"], font=("Arial", 12))
         combobox.grid(row=0, column=0, columnspan=2, sticky=tk.W)
         combobox.set("魔道入侵")
         self.activity_combobox = combobox
 
         # Create input fields for activity details
-        labels = ["四倍数量 (默认为0)：", "体力次数 (默认为0)：", "材料数量 (默认为0)：", "神物园加速次数(默认为19)："]
-        # self.input_fields = [self.create_input_field(label, i+1) for i, label in enumerate(labels)]
+        labels = ["四倍/探查符数量(默认为0)：", "体力次数(默认为0)：", "材料数量(默认为0)：", "神物园加速次数(默认为19)："]
         
         self.entries = {}
         for i, label in enumerate(labels):
@@ -184,18 +184,15 @@ class Page(tk.Frame):
     def submit(self):
         values = {label: int(entry.get()) for label, entry in self.entries.items()}
         selected_activity = self.activity_combobox.get()
-        # Do something with values and selected_activity
-        print("Values:", values)
-        print("Selected activity:", selected_activity)
 
         popup = tk.Toplevel()
         popup.title(f"{selected_activity}")
         popup.geometry("300x200")
 
         activity_info = daily_work(
-            items_num=values["材料数量 (默认为0)："],
-            core_num=values["四倍数量 (默认为0)："],
-            tili_num=values["体力次数 (默认为0)："],
+            items_num=values["材料数量(默认为0)："],
+            core_num=values["四倍/探查符数量(默认为0)："],
+            tili_num=values.get("体力次数(默认为0)：", 0),
             event_name=selected_activity,
             jiasu_num=values["神物园加速次数(默认为19)："]
         )
@@ -211,56 +208,84 @@ class Page(tk.Frame):
             else:
                 label_days_needed = tk.Label(popup, text=f"{key}: {value}", font=("Arial", 12), fg="red")
                 label_days_needed.grid(sticky="w", padx=5)
-        
-class ShouYuan(tk.Frame):
+
+class ChongBang(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        labels = ["材料数量(默认为0)：", "探查符数量(默认为0)：", "神物园加速次数(默认为19)："]
-        self.entries = {}
+        # Create combobox for activity selection
+        combobox = ttk.Combobox(self, values=["魔道入侵", "天地弈局", "云梦试剑", "虚天殿"], font=("Arial", 12))
+        combobox.grid(row=0, column=0, columnspan=2, sticky=tk.W)
+        combobox.set("魔道入侵")
+        self.activity_combobox = combobox
 
+        labels = ["当前兑换积分：", "目标兑换积分：", "分割线", "当前排名积分：", "目标排名积分：", "分割线", "天地弈局每次获得棋符数量："]
+        
+        self.entries = {}
         for i, label in enumerate(labels):
+            if label == "分割线":
+                label = tk.Label(self, text="=" * 30, fg="green")
+                label.grid(sticky="w")
+                continue
+
             self.label = tk.Label(self, text=label, font=("Arial", 12))
-            self.label.grid(row=i, column=0)
+            self.label.grid(row=i+1, column=0)
 
             entry = tk.Entry(self)
-            if label == "神物园加速次数(默认为19)：":
-                entry.insert(0, 19)
-            else:
-                entry.insert(0, 0)
+            entry.insert(0, 0)
 
-            entry.grid(row=i, column=1)
+            entry.grid(row=i+1, column=1)
             self.entries[label] = entry
-
+        
+        # Create submit button
         self.button = ttk.Button(self, text="提交", command=self.submit)
         self.button.grid(row=len(labels)+1, column=0, columnspan=2, sticky=tk.E+tk.W, padx=10, pady=10)
 
     def submit(self):
         values = {label: int(entry.get()) for label, entry in self.entries.items()}
-        shouyuan_info = daily_work(
-            items_num=values["材料数量(默认为0)："],
-            core_num=values["探查符数量(默认为0)："],
-            tili_num=0,
-            event_name="兽渊探秘",
-            jiasu_num=values["神物园加速次数(默认为19)："]
-        )
+        selected_activity = self.activity_combobox.get()
 
         popup = tk.Toplevel()
-        popup.title("兽渊探秘")
-        popup.geometry("300x200")
+        popup.title(f"{selected_activity}")
+        popup.geometry("400x200")
 
-        for key, value in shouyuan_info.items():
-            if key != "需要的天数":
-                label = tk.Label(
-                    popup, 
-                    text=f"{key}: {value}", 
-                    font=("Arial", 12), 
-                )
-                label.grid(sticky="w")
-            else:
-                label_days_needed = tk.Label(popup, text=f"需要{value}天", font=("Arial", 12), fg="red")
-                label_days_needed.grid(sticky="w", padx=5)
+        if selected_activity == "天地弈局":
+            activity_info = chong_bang(
+                event=selected_activity,
+                current_score=values["当前兑换积分："],
+                current_rank_score=values["当前排名积分："],
+                target_score=values["目标兑换积分："],
+                target_rank_score=values["目标排名积分："],
+                qifu_per_time=values["天地弈局每次获得棋符数量："]
+            )
+        else:
+            activity_info = chong_bang(
+                event=selected_activity,
+                current_score=values["当前兑换积分："],
+                current_rank_score=values["当前排名积分："],
+                target_score=values["目标兑换积分："],
+                target_rank_score=values["目标排名积分："],
+            )
+
+        output_info1 = f"达到目标兑换积分需要的四倍数量: {activity_info['target_score_need_core_item_num']}"
+        output_info2 = f"在达到目标兑换积分后的排名积分: {activity_info['current_rank_score_after_buy_core_item']}"
+        output_info3 = f"达到目标排名积分需要的四倍数量: {activity_info['target_rank_score_need_core_item_num']}"
+        output_info4 = f"在达到目标排名积分后的兑换积分: {activity_info['current_score_after_buy_core_item']}"
+
+        label_1 = tk.Label(popup, text=output_info1, font=("Arial", 12), fg="red")
+        label_1.grid(sticky="w", padx=5)
+
+        label_2 = tk.Label(popup, text=output_info2, font=("Arial", 12))
+        label_2.grid(sticky="w", padx=5)
+
+        label_3 = tk.Label(popup, text=output_info3, font=("Arial", 12), fg="red")
+        label_3.grid(sticky="w", padx=5)
+
+        label_4 = tk.Label(popup, text=output_info4, font=("Arial", 12))
+        label_4.grid(sticky="w", padx=5)
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()
