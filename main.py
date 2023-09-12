@@ -285,8 +285,6 @@ class ChongBang(tk.Frame):
         label_4 = tk.Label(popup, text=output_info4, font=("Arial", 12))
         label_4.grid(sticky="w", padx=5)
 
-
-
 if __name__ == "__main__":
     root = tk.Tk()
     root.iconbitmap('icon.ico')
