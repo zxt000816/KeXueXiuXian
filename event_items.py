@@ -54,12 +54,13 @@ def daily_work(
     core_num: int,
     tili_num: int,
     event_name: str,
-    jiasu_num: int = 19
+    jiasu_num: int = 19,
+    num_of_linggen: int = 1
 ):
     if event_name not in events:
         raise ValueError(f"event_name must be one of {events}")
 
-    needed_core_num = event_core_num[event_name]
+    needed_core_num = event_core_num[event_name] * num_of_linggen
     core_num_to_get = needed_core_num - core_num
     core_needed_items_num_unit = event_core_needed_items[event_name]
     every_day_harvest_num = hourly_harvest_num[event_name] * 24 + jiasu_harvest_num[event_name][jiasu_num-1] + faze_harvest_num[event_name]
@@ -74,24 +75,24 @@ def daily_work(
 
         return {
             "活动": event_name,
-            "需要的材料数量": to_9000,
-            "需要的材料数量(不考虑体力)": to_9000_without_tili,
-            "需要的四倍数量": core_num_to_get,
+            f"获取{num_of_linggen}个灵根需要的材料数量": to_9000,
+            f"获取{num_of_linggen}个灵根需要的材料数量(不考虑体力)": to_9000_without_tili,
+            f"获取{num_of_linggen}个灵根需要的四倍数量": core_num_to_get,
             "当前材料数量": items_num,
             "每天的收获数量": every_day_harvest_num,
-            "需要的天数": necc_days,
-            "需要的天数(不考虑体力)": necc_days_without_tili
+            f"获取{num_of_linggen}个灵根需要的天数": necc_days,
+            f"获取{num_of_linggen}个灵根需要的天数(不考虑体力)": necc_days_without_tili
         }
     else:
         to_9000 = core_num_to_get * core_needed_items_num_unit
         necc_days = round((to_9000 - items_num) / every_day_harvest_num, 2)
         return {
             "活动": event_name,
-            "需要的材料数量": to_9000,
-            "需要的探查符数量": core_num_to_get,
+            f"获取{num_of_linggen}个灵根需要的材料数量": to_9000,
+            f"获取{num_of_linggen}个灵根需要的探查符数量": core_num_to_get,
             "当前材料数量": items_num,
             "每天的收获数量": every_day_harvest_num,
-            "需要的天数": necc_days
+            f"获取{num_of_linggen}个灵根需要的天数": necc_days
         }
 
 if __name__ == "__main__":

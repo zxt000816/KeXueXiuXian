@@ -161,7 +161,7 @@ class Page(tk.Frame):
         self.activity_combobox = combobox
 
         # Create input fields for activity details
-        labels = ["四倍/探查符数量(默认为0)：", "体力次数(默认为0)：", "材料数量(默认为0)：", "神物园加速次数(默认为19)："]
+        labels = ["灵根数量(默认为1)：", "四倍/探查符数量(默认为0)：", "体力次数(默认为0)：", "材料数量(默认为0)：", "神物园加速次数(默认为19)："]
         
         self.entries = {}
         for i, label in enumerate(labels):
@@ -171,6 +171,8 @@ class Page(tk.Frame):
             entry = tk.Entry(self)
             if label == "神物园加速次数(默认为19)：":
                 entry.insert(0, 19)
+            elif label == "灵根数量(默认为0)：":
+                entry.insert(0, 1)
             else:
                 entry.insert(0, 0)
 
@@ -187,14 +189,15 @@ class Page(tk.Frame):
 
         popup = tk.Toplevel()
         popup.title(f"{selected_activity}")
-        popup.geometry("300x200")
+        popup.geometry("350x200")
 
         activity_info = daily_work(
             items_num=values["材料数量(默认为0)："],
             core_num=values["四倍/探查符数量(默认为0)："],
             tili_num=values.get("体力次数(默认为0)：", 0),
             event_name=selected_activity,
-            jiasu_num=values["神物园加速次数(默认为19)："]
+            jiasu_num=values["神物园加速次数(默认为19)："],
+            num_of_linggen=values["灵根数量(默认为1)："]
         )
 
         for key, value in activity_info.items():
@@ -215,7 +218,7 @@ class ChongBang(tk.Frame):
         self.controller = controller
 
         # Create combobox for activity selection
-        combobox = ttk.Combobox(self, values=["魔道入侵", "天地弈局", "云梦试剑", "虚天殿"], font=("Arial", 12))
+        combobox = ttk.Combobox(self, values=["魔道入侵", "兽渊探秘", "天地弈局", "云梦试剑", "虚天殿"], font=("Arial", 12))
         combobox.grid(row=0, column=0, columnspan=2, sticky=tk.W)
         combobox.set("魔道入侵")
         self.activity_combobox = combobox
@@ -268,9 +271,10 @@ class ChongBang(tk.Frame):
                 target_rank_score=values["目标排名积分："],
             )
 
-        output_info1 = f"达到目标兑换积分需要的四倍数量: {activity_info['target_score_need_core_item_num']}"
+        item_type = "探查符" if selected_activity == "兽渊探秘" else "四倍"
+        output_info1 = f"达到目标兑换积分需要的{item_type}数量: {activity_info['target_score_need_core_item_num']}"
         output_info2 = f"在达到目标兑换积分后的排名积分: {activity_info['current_rank_score_after_buy_core_item']}"
-        output_info3 = f"达到目标排名积分需要的四倍数量: {activity_info['target_rank_score_need_core_item_num']}"
+        output_info3 = f"达到目标排名积分需要的{item_type}数量: {activity_info['target_rank_score_need_core_item_num']}"
         output_info4 = f"在达到目标排名积分后的兑换积分: {activity_info['current_score_after_buy_core_item']}"
 
         label_1 = tk.Label(popup, text=output_info1, font=("Arial", 12), fg="red")

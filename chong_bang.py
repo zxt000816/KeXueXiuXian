@@ -76,9 +76,40 @@ def TianDiYIJu(current_qiyu, current_qifu, target_qiyu, target_qifu, qifu_per_ti
         'current_score_after_buy_core_item': int(current_qiyu_after_buy_core_item)
     }
 
-def chong_bang(event, current_score, current_rank_score, target_score, target_rank_score, qifu_per_time=90, qi_yu_per_time=30):
+def ShouYuanTanMi(current_score, current_rank_score, target_score, target_rank_score, mode='average'):
+    """
+    最大值: 1540
+    最小值: 1280
+    平均值: 1435
+    """
+
+    if mode == 'average':
+        score_per_time = 1435 / 10
+    elif mode == 'max':
+        score_per_time = 1540 / 10
+    elif mode == 'min':
+        score_per_time = 1280 / 10
+
+    avg_rank_score_per_time = 9000 / 80
+
+    target_score_need_core_item_num = (target_score - current_score) / score_per_time
+    current_rank_score_after_buy_core_item = current_rank_score + target_score_need_core_item_num * avg_rank_score_per_time
+
+    target_rank_score_need_core_item_num = (target_rank_score - current_rank_score) / avg_rank_score_per_time
+    current_score_after_buy_core_item = current_score + target_rank_score_need_core_item_num * score_per_time
+
+    return {
+        'target_score_need_core_item_num': round(target_score_need_core_item_num, 2),
+        'current_rank_score_after_buy_core_item': int(current_rank_score_after_buy_core_item),
+        'target_rank_score_need_core_item_num': round(target_rank_score_need_core_item_num, 2),
+        'current_score_after_buy_core_item': int(current_score_after_buy_core_item)
+    }
+
+def chong_bang(event, current_score, current_rank_score, target_score, target_rank_score, qifu_per_time=90, qi_yu_per_time=30, mode='average'):
     if event == "虚天殿":
         return XuTianDian(current_score, current_rank_score, target_score, target_rank_score)
+    elif event == "兽渊探秘":
+        return ShouYuanTanMi(current_score, current_rank_score, target_score, target_rank_score, mode=mode)
     elif event == "魔道入侵":
         return MoDaoRuQin(current_score, current_rank_score, target_score, target_rank_score)
     elif event == "云梦试剑":
