@@ -171,7 +171,7 @@ class Page(tk.Frame):
             entry = tk.Entry(self)
             if label == "神物园加速次数(默认为19)：":
                 entry.insert(0, 19)
-            elif label == "灵根数量(默认为0)：":
+            elif label == "灵根数量(默认为1)：":
                 entry.insert(0, 1)
             else:
                 entry.insert(0, 0)
