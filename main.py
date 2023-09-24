@@ -45,7 +45,7 @@ class Calendar(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         labels = [
-            "天雷竹 (默认为0)：", "星海火树 (默认为0)：", "玄玉葫芦 (默认为0)：","堕天松 (默认为0)：", "灵眼神树 (默认为0)：", "神物园加速次数(默认为19)：","分割线",
+            "天雷竹 (默认为0)：", "星海火树 (默认为0)：", "玄玉葫芦 (默认为0)：","堕天松 (默认为0)：", "灵眼神树 (默认为0)：", "神物园加速次数(默认为23)：","分割线",
             "魔道入侵四倍 (默认为0)：", "兽渊探秘探查 (默认为0)：", "云梦试剑四倍 (默认为0)：", "虚天殿四倍 (默认为0)：", "天地弈局四倍 (默认为0)：", "分割线",
             "魔道入侵挑战次数 (默认为0)：", "云梦试剑挑战次数 (默认为0)：", "虚天殿挑战次数 (默认为0)：", "天地弈局挑战次数 (默认为0)：", 
         ]
@@ -62,8 +62,8 @@ class Calendar(tk.Frame):
 
             entry = tk.Entry(self)
 
-            if label == "神物园加速次数(默认为19)：":
-                entry.insert(0, 19)
+            if label == "神物园加速次数(默认为23)：":
+                entry.insert(0, 23)
             else:
                 entry.insert(0, 0)
 
@@ -82,30 +82,35 @@ class Calendar(tk.Frame):
                 "core_num": values["魔道入侵四倍 (默认为0)："],
                 "tili_num": values["魔道入侵挑战次数 (默认为0)："],
                 "event_name": "魔道入侵",
+                "jiasu_num": values["神物园加速次数(默认为23)："],
             },
             {
                 "items_num": values["星海火树 (默认为0)："],
                 "core_num": values["兽渊探秘探查 (默认为0)："],
                 "tili_num": 0,
                 "event_name": "兽渊探秘",
+                "jiasu_num": values["神物园加速次数(默认为23)："],
             },
             {
                 "items_num": values["玄玉葫芦 (默认为0)："],
                 "core_num": values["云梦试剑四倍 (默认为0)："],
                 "tili_num": values["云梦试剑挑战次数 (默认为0)："],
                 "event_name": "云梦试剑",
+                "jiasu_num": values["神物园加速次数(默认为23)："],
             },
             {
                 "items_num": values["堕天松 (默认为0)："],
                 "core_num": values["虚天殿四倍 (默认为0)："],
                 "tili_num": values["虚天殿挑战次数 (默认为0)："],
                 "event_name": "虚天殿",
+                "jiasu_num": values["神物园加速次数(默认为23)："],
             },
             {
                 "items_num": values["灵眼神树 (默认为0)："],
                 "core_num": values["天地弈局四倍 (默认为0)："],
                 "tili_num": values["天地弈局挑战次数 (默认为0)："],
                 "event_name": "天地弈局",
+                "jiasu_num": values["神物园加速次数(默认为23)："],
             }
         ]
 
@@ -161,7 +166,7 @@ class Page(tk.Frame):
         self.activity_combobox = combobox
 
         # Create input fields for activity details
-        labels = ["灵根数量(默认为1)：", "四倍/探查符数量(默认为0)：", "体力次数(默认为0)：", "材料数量(默认为0)：", "神物园加速次数(默认为19)："]
+        labels = ["灵根数量(默认为1)：", "四倍/探查符数量(默认为0)：", "体力次数(默认为0)：", "材料数量(默认为0)：", "神物园加速次数(默认为23)："]
         
         self.entries = {}
         for i, label in enumerate(labels):
@@ -169,8 +174,8 @@ class Page(tk.Frame):
             self.label.grid(row=i+1, column=0)
 
             entry = tk.Entry(self)
-            if label == "神物园加速次数(默认为19)：":
-                entry.insert(0, 19)
+            if label == "神物园加速次数(默认为23)：":
+                entry.insert(0, 23)
             elif label == "灵根数量(默认为1)：":
                 entry.insert(0, 1)
             else:
@@ -196,7 +201,7 @@ class Page(tk.Frame):
             core_num=values["四倍/探查符数量(默认为0)："],
             tili_num=values.get("体力次数(默认为0)：", 0),
             event_name=selected_activity,
-            jiasu_num=values["神物园加速次数(默认为19)："],
+            jiasu_num=values["神物园加速次数(默认为23)："],
             num_of_linggen=values["灵根数量(默认为1)："]
         )
 

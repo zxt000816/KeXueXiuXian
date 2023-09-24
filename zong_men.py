@@ -9,12 +9,16 @@ task_info = {
     9: {
         'weiwang': 270,
         'gongxian': 60,
-    }
+    },
+    10: {
+        'weiwang': 360,
+        'gongxian': 80,
+    },
 }
 
 qifu_weiwang = [180, 180, 360, 180, 180, 360]
 qifu_gongxian = [300, 300, 600, 300, 300, 600]
-zhenxie_gongxian=300
+zhenxie_gongxian = 320
 
 def zong_men(
     weiwang_now, 
@@ -48,15 +52,15 @@ def zong_men(
     print(colored('获得目标物品需要的天数：', 'green'), round(necc_days_to_target_item, 2))
 
 if __name__ == "__main__":
-    weiwang_now = 46995
-    weiwang_next_level = 51200
-    gongxian_now = 2830
-    target_item_gongxian = 7500
+    weiwang_now = 96945
+    weiwang_next_level = 102400
+    gongxian_now = 6250
+    target_item_gongxian = 7500 * 2
 
     zong_men(
         weiwang_now=weiwang_now,
         gongxian_now=gongxian_now,
         weiwang_next_level=weiwang_next_level,
         target_item_gongxian=target_item_gongxian,
-        num_qifu=3,
+        num_qifu=6,
     )
