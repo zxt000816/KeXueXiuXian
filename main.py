@@ -296,6 +296,6 @@ class ChongBang(tk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.iconbitmap('icon.ico')
+    # root.iconbitmap('icon.ico')
     MainApp(root)
     root.mainloop()
