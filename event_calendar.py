@@ -95,7 +95,15 @@ data = data[['活动', '剩余天数', '开始', '结束', '游戏天数(开始)
 # filter out events that are already over
 data = data[data['剩余天数'].apply(lambda x: x.split('天')[0]).astype(int) >= 0]
 
+
+today
+
+datetime.strftime(today, '%Y-%m-%d')
 # print(tabulate(data, headers='keys', tablefmt='psql'))
+
+event_col = f"活动 (当前: {datetime.strftime(today, '%Y-%m-%d')})"
+
+data = data.rename(columns={'活动': event_col})
 
 def style_important_event(event):
     other_events = ['龙相竞舟跨服[4]', '珍珑游宴跨服[4]', '凤相竞舟跨服[4]']
@@ -108,6 +116,4 @@ def style_important_event(event):
     else:
         return ''
 
-data.style.applymap(style_important_event, subset=['活动'])
-    
-    
+data.style.applymap(style_important_event, subset=[event_col])
