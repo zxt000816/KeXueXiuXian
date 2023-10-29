@@ -1,16 +1,15 @@
-primary = 1350
-first_time = 2630 - primary
-second_time = 4090 - 2630
-third_time = 5550 - 4090
-fourth_time = 7090 - 5550
+events = ["魔道入侵", "兽渊探秘", "云梦试剑", "天地弈局", "虚天殿"]
 
-print("First time: " + str(first_time))
-print("Second time: " + str(second_time))
-print("Third time: " + str(third_time))
-print("Fourth time: " + str(fourth_time))
+event_core_num = {
+    "魔道入侵": 29,
+    "兽渊探秘": 80,
+    "云梦试剑": 40,
+    "天地弈局": 80,
+    "虚天殿": 38
+}
 
-(first_time + second_time + third_time + fourth_time) / 4
-
-max([first_time, second_time, third_time, fourth_time])
-
-min([first_time, second_time, third_time, fourth_time])
+target_points = 14000
+for event in events:
+    points_per_event_core = 9000 / event_core_num[event]
+    print(f"{event}, 每个四倍/探查获得的兑换积分: ", points_per_event_core)
+    print(f"{event}, 达到14000积分需要的四倍/探查数量: ", round(target_points / points_per_event_core, 1))

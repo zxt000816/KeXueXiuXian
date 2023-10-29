@@ -166,7 +166,7 @@ class Page(tk.Frame):
         self.activity_combobox = combobox
 
         # Create input fields for activity details
-        labels = ["灵根数量(默认为1)：", "四倍/探查符数量(默认为0)：", "体力次数(默认为0)：", "材料数量(默认为0)：", "神物园加速次数(默认为23)："]
+        labels = ["目标兑换积分(默认为9000)：", "四倍/探查符数量(默认为0)：", "体力次数(默认为0)：", "材料数量(默认为0)：", "神物园加速次数(默认为23)："]
         
         self.entries = {}
         for i, label in enumerate(labels):
@@ -176,8 +176,8 @@ class Page(tk.Frame):
             entry = tk.Entry(self)
             if label == "神物园加速次数(默认为23)：":
                 entry.insert(0, 23)
-            elif label == "灵根数量(默认为1)：":
-                entry.insert(0, 1)
+            elif label == "目标兑换积分(默认为9000)：":
+                entry.insert(0, 9000)
             else:
                 entry.insert(0, 0)
 
@@ -202,7 +202,7 @@ class Page(tk.Frame):
             tili_num=values.get("体力次数(默认为0)：", 0),
             event_name=selected_activity,
             jiasu_num=values["神物园加速次数(默认为23)："],
-            num_of_linggen=values["灵根数量(默认为1)："]
+            target_score=values["目标兑换积分(默认为9000)："]
         )
 
         for key, value in activity_info.items():
@@ -228,7 +228,13 @@ class ChongBang(tk.Frame):
         combobox.set("魔道入侵")
         self.activity_combobox = combobox
 
-        labels = ["当前兑换积分：", "目标兑换积分：", "分割线", "当前排名积分：", "目标排名积分：", "分割线", "天地弈局每次获得棋符数量："]
+        combobox2 = ttk.Combobox(self, values=["排名积分", "兑换积分"], font=("Arial", 12))
+        combobox2.grid(row=1, column=0, columnspan=2, sticky=tk.W)
+        combobox2.set("排名积分")
+        self.score_type_combobox = combobox2
+
+        num_combobox = 2
+        labels = ["分割线", "当前兑换积分：", "目标兑换积分：", "分割线", "当前排名积分：", "目标排名积分：", "分割线", "天地弈局每次获得棋符数量："]
         
         self.entries = {}
         for i, label in enumerate(labels):
@@ -238,21 +244,22 @@ class ChongBang(tk.Frame):
                 continue
 
             self.label = tk.Label(self, text=label, font=("Arial", 12))
-            self.label.grid(row=i+1, column=0)
+            self.label.grid(row=i+num_combobox, column=0)
 
             entry = tk.Entry(self)
             entry.insert(0, 0)
 
-            entry.grid(row=i+1, column=1)
+            entry.grid(row=i+num_combobox, column=1)
             self.entries[label] = entry
         
         # Create submit button
         self.button = ttk.Button(self, text="提交", command=self.submit)
-        self.button.grid(row=len(labels)+1, column=0, columnspan=2, sticky=tk.E+tk.W, padx=10, pady=10)
+        self.button.grid(row=len(labels)+num_combobox, column=0, columnspan=2, sticky=tk.E+tk.W, padx=10, pady=10)
 
     def submit(self):
         values = {label: int(entry.get()) for label, entry in self.entries.items()}
         selected_activity = self.activity_combobox.get()
+        selected_score_type = self.score_type_combobox.get()
 
         popup = tk.Toplevel()
         popup.title(f"{selected_activity}")
@@ -277,22 +284,31 @@ class ChongBang(tk.Frame):
             )
 
         item_type = "探查符" if selected_activity == "兽渊探秘" else "四倍"
-        output_info1 = f"达到目标兑换积分需要的{item_type}数量: {activity_info['target_score_need_core_item_num']}"
-        output_info2 = f"在达到目标兑换积分后的排名积分: {activity_info['current_rank_score_after_buy_core_item']}"
-        output_info3 = f"达到目标排名积分需要的{item_type}数量: {activity_info['target_rank_score_need_core_item_num']}"
-        output_info4 = f"在达到目标排名积分后的兑换积分: {activity_info['current_score_after_buy_core_item']}"
 
+        output_info1 = ""
+        output_info2 = ""
+        if selected_score_type == "兑换积分":
+            output_info1 = f"兑换积分 {values['当前兑换积分：']} ==> {values['目标兑换积分：']} 需要{item_type}: {activity_info['target_score_need_core_item_num']}"
+            output_info2 = f"排名积分 {values['当前排名积分：']} ==> {activity_info['current_rank_score_after_buy_core_item']}"
+
+        if selected_score_type == "排名积分":
+            output_info1 = f"排名积分 {values['当前排名积分：']} ==> {values['目标排名积分：']} 需要{item_type}: {activity_info['target_rank_score_need_core_item_num']}"
+            output_info2 = f"兑换积分 {values['当前兑换积分：']} ==> {activity_info['current_score_after_buy_core_item']}"
+        
         label_1 = tk.Label(popup, text=output_info1, font=("Arial", 12), fg="red")
         label_1.grid(sticky="w", padx=5)
 
         label_2 = tk.Label(popup, text=output_info2, font=("Arial", 12))
         label_2.grid(sticky="w", padx=5)
 
-        label_3 = tk.Label(popup, text=output_info3, font=("Arial", 12), fg="red")
-        label_3.grid(sticky="w", padx=5)
+        # label = tk.Label(popup, text="=" * 40, fg="green")
+        # label.grid(sticky="w", padx=5)
 
-        label_4 = tk.Label(popup, text=output_info4, font=("Arial", 12))
-        label_4.grid(sticky="w", padx=5)
+        # label_3 = tk.Label(popup, text=output_info3, font=("Arial", 12), fg="red")
+        # label_3.grid(sticky="w", padx=5)
+
+        # label_4 = tk.Label(popup, text=output_info4, font=("Arial", 12))
+        # label_4.grid(sticky="w", padx=5)
 
 if __name__ == "__main__":
     root = tk.Tk()

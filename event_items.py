@@ -1,4 +1,5 @@
 events = ["魔道入侵", "兽渊探秘", "云梦试剑", "天地弈局", "虚天殿"]
+
 event_core_num = {
     "魔道入侵": 29,
     "兽渊探秘": 80,
@@ -6,6 +7,15 @@ event_core_num = {
     "天地弈局": 80,
     "虚天殿": 38
 }
+
+event_score_per_core = {
+    "魔道入侵": 9000 / event_core_num["魔道入侵"],
+    "兽渊探秘": 9000 / event_core_num["兽渊探秘"],
+    "云梦试剑": 9000 / event_core_num["云梦试剑"],
+    "天地弈局": 9000 / event_core_num["天地弈局"],
+    "虚天殿": 9000 / event_core_num["虚天殿"]
+}
+
 event_core_needed_items = {
     "魔道入侵": 350,
     "兽渊探秘": 305,
@@ -13,12 +23,7 @@ event_core_needed_items = {
     "天地弈局": 600,
     "虚天殿": 900
 }
-tili_num_info = {
-    "魔道入侵": 29,
-    "云梦试剑": 40,
-    "天地弈局": 80,
-    "虚天殿": 38
-} # 活动体力次数
+
 tili_needed_items = {
     "魔道入侵": 120,
     "云梦试剑": 150,
@@ -50,49 +55,63 @@ faze_harvest_num = {
     "虚天殿": 2100
 }
 def daily_work(
-    items_num: int,
-    core_num: int,
-    tili_num: int,
-    event_name: str,
-    jiasu_num: int = 19,
-    num_of_linggen: int = 1
+    items_num: int, # 现有材料数量
+    core_num: int, # 现有四倍/探查数量
+    tili_num: int, # 现有体力次数
+    event_name: str, # 活动名称
+    jiasu_num: int = 23, # 加速次数
+    target_score: int = 9000
 ):
     if event_name not in events:
         raise ValueError(f"event_name must be one of {events}")
 
-    needed_core_num = event_core_num[event_name] * num_of_linggen
-    core_num_to_get = needed_core_num - core_num
-    core_needed_items_num_unit = event_core_needed_items[event_name]
+    needed_core_num = target_score / event_score_per_core[event_name] # 需要的四倍数量
+    needed_tili_num = needed_core_num # 需要的体力次数(等于四倍数量)
+    core_num_to_get = needed_core_num - core_num # 实际需要的四倍数量 = 需要的四倍数量 - 现有四倍数量
+    core_needed_items_num_unit = event_core_needed_items[event_name] # 每个四倍/探查需要的材料数量
+
+    # 每天的收获数量 = 每小时的收获数量 * 24 + 加速收获数量 + 法则收获数量
     every_day_harvest_num = hourly_harvest_num[event_name] * 24 + jiasu_harvest_num[event_name][jiasu_num-1] + faze_harvest_num[event_name]
 
+    # 兽渊探秘不需要体力, 其他活动需要体力
     if event_name != "兽渊探秘":
-        tili_num_to_get = tili_num_info[event_name] - tili_num
-        tili_needed_items_num_unit = tili_needed_items[event_name]
-        to_9000 = core_num_to_get * core_needed_items_num_unit + tili_num_to_get * tili_needed_items_num_unit
-        to_9000_without_tili = core_num_to_get * core_needed_items_num_unit
-        necc_days = round((to_9000 - items_num) / every_day_harvest_num, 2)
-        necc_days_without_tili = round((to_9000_without_tili - items_num) / every_day_harvest_num, 2)
+        # 实际需要的体力次数 = 需要的体力次数 - 现有体力次数
+        tili_num_to_get = needed_tili_num - tili_num
+        tili_needed_items_num_unit = tili_needed_items[event_name] # 每个体力需要的材料数量
+
+        # 实际需要的材料数量 = 实际需要的四倍数量 * 每个四倍/探查需要的材料数量 + 实际需要的体力次数 * 每个体力需要的材料数量
+        items_num_to_target_score = core_num_to_get * core_needed_items_num_unit + tili_num_to_get * tili_needed_items_num_unit
+        
+        # 不考虑体力的实际需要的材料数量 = 实际需要的四倍数量 * 每个四倍/探查需要的材料数量
+        items_num_to_target_score_without_tili = core_num_to_get * core_needed_items_num_unit
+        
+        # 实际需要的天数 = (实际需要的材料数量 - 现有材料数量) / 每天的收获数量
+        necc_days = round((items_num_to_target_score - items_num) / every_day_harvest_num, 2)
+        
+        # 不考虑体力的实际需要的天数 = (不考虑体力的实际需要的材料数量 - 现有材料数量) / 每天的收获数量
+        necc_days_without_tili = round((items_num_to_target_score_without_tili - items_num) / every_day_harvest_num, 2)
 
         return {
             "活动": event_name,
-            f"获取{num_of_linggen}个灵根需要的材料数量": to_9000,
-            f"获取{num_of_linggen}个灵根需要的材料数量(不考虑体力)": to_9000_without_tili,
-            f"获取{num_of_linggen}个灵根需要的四倍数量": core_num_to_get,
+            f"{target_score}兑换积分需要的材料数量": round(items_num_to_target_score, 2),
+            f"{target_score}兑换积分需要的材料数量(不考虑体力)": round(items_num_to_target_score_without_tili, 2),
+            f"{target_score}兑换积分需要的四倍数量": round(core_num_to_get, 2),
             "当前材料数量": items_num,
             "每天的收获数量": every_day_harvest_num,
-            f"获取{num_of_linggen}个灵根需要的天数": necc_days,
-            f"获取{num_of_linggen}个灵根需要的天数(不考虑体力)": necc_days_without_tili
+            f"{target_score}兑换积分需要的天数": necc_days,
+            f"{target_score}兑换积分需要的天数(不考虑体力)": necc_days_without_tili
         }
     else:
-        to_9000 = core_num_to_get * core_needed_items_num_unit
-        necc_days = round((to_9000 - items_num) / every_day_harvest_num, 2)
+        # 实际需要的材料数量 = 实际需要的四倍数量 * 每个四倍/探查需要的材料数量
+        items_num_to_target_score = core_num_to_get * core_needed_items_num_unit
+        necc_days = round((items_num_to_target_score - items_num) / every_day_harvest_num, 2)
         return {
             "活动": event_name,
-            f"获取{num_of_linggen}个灵根需要的材料数量": to_9000,
-            f"获取{num_of_linggen}个灵根需要的探查符数量": core_num_to_get,
+            f"{target_score}兑换积分需要的材料数量": items_num_to_target_score,
+            f"{target_score}兑换积分需要的探查符数量": core_num_to_get,
             "当前材料数量": items_num,
             "每天的收获数量": every_day_harvest_num,
-            f"获取{num_of_linggen}个灵根需要的天数": necc_days
+            f"{target_score}兑换积分需要的天数": necc_days
         }
 
 if __name__ == "__main__":
