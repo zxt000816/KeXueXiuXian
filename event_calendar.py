@@ -72,6 +72,7 @@ known_events = [
     {'活动': '炼体法相', '跨服': 1, '开始': '2023-11-10', '结束': '2023-11-10', '游戏天数(开始)': 2125, '游戏天数(结束)': 2125},
     {'活动': '炼体法相', '跨服': 4, '开始': '2023-11-11', '结束': '2023-11-12', '游戏天数(开始)': 2126, '游戏天数(结束)': 2127},
     {'活动': '虚天殿', '跨服': 2, '开始': '2023-11-12', '结束': '2023-11-13', '游戏天数(开始)': 2127, '游戏天数(结束)': 2128},
+    {'活动': '社团洗灵', '跨服': 2, '开始': '2023-11-13', '结束': '2023-11-14', '游戏天数(开始)': 2128, '游戏天数(结束)': 2129},
 ]
 
 data = pd.DataFrame(known_events)
@@ -94,6 +95,19 @@ data = data[['活动', '剩余天数', '开始', '结束', '游戏天数(开始)
 # filter out events that are already over
 data = data[data['剩余天数'].apply(lambda x: x.split('天')[0]).astype(int) >= 0]
 
-print(tabulate(data, headers='keys', tablefmt='psql'))
+# print(tabulate(data, headers='keys', tablefmt='psql'))
 
-data.to_csv('event_calendar.csv', index=False, encoding='utf-8-sig')
+def style_important_event(event):
+    other_events = ['龙相竞舟跨服[4]', '珍珑游宴跨服[4]', '凤相竞舟跨服[4]']
+    if '社团' in event:
+        return 'color: green;' + 'font-weight: bold;'
+    elif '[8]' in event:
+        return 'color: red;' + 'font-weight: bold;'
+    elif event in other_events:
+        return 'color: blue;'  + 'font-weight: bold;'
+    else:
+        return ''
+
+data.style.applymap(style_important_event, subset=['活动'])
+    
+    
