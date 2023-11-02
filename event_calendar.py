@@ -76,7 +76,31 @@ known_events = [
     {'活动': '兽渊探秘', '跨服': 4, '开始': '2023-11-14', '结束': '2023-11-15', '游戏天数(开始)': 2129, '游戏天数(结束)': 2130},
     {'活动': '瑶池花会', '跨服': 2, '开始': '2023-11-15', '结束': '2023-11-16', '游戏天数(开始)': 2130, '游戏天数(结束)': 2131},
     {'活动': '天地弈局', '跨服': 1, '开始': '2023-11-16', '结束': '2023-11-16', '游戏天数(开始)': 2131, '游戏天数(结束)': 2131},
+    {'活动': '天地弈局', '跨服': 4, '开始': '2023-11-17', '结束': '2023-11-17', '游戏天数(开始)': 2132, '游戏天数(结束)': 2132},
+    {'活动': '灵宠竞武', '跨服': 2, '开始': '2023-11-17', '结束': '2023-11-18', '游戏天数(开始)': 2132, '游戏天数(结束)': 2133},
+    {'活动': '社团大比', '跨服': 8, '开始': '2023-11-18', '结束': '2023-11-18', '游戏天数(开始)': 2133, '游戏天数(结束)': 2133},
 ]
+
+uncertain_events = [
+    {'活动': '法相竞舟(天凤)', '跨服': 4, '游戏天数(开始)': 2132, '开始': '2023-11-17'},
+    {'活动': '魔道入侵', '跨服': 16, '游戏天数(开始)': 2135, '开始': '2023-11-20'},
+    {'活动': '丹道问鼎', '跨服': 16, '游戏天数(开始)': 2136, '开始': '2023-11-21'},
+    {'活动': '仙盟争霸', '跨服': 8, '游戏天数(开始)': 2142, '开始': '2023-11-27'},
+    {'活动': '洗灵证武', '跨服': 4, '游戏天数(开始)': 2142, '开始': '2023-11-27'},
+    {'活动': '仙园游宴(山海套装)', '跨服': 4, '游戏天数(开始)': 2146, '开始': '2023-12-01'},
+    {'活动': '炼体法相', '跨服': 8, '游戏天数(开始)': 2148, '开始': '2023-12-03'},
+    {'活动': '虚天殿', '跨服': 8, '游戏天数(开始)': 2150, '开始': '2023-12-05'},
+    {'活动': '仙盟争霸', '跨服': 8, '游戏天数(开始)': 2160, '开始': '2023-12-15'},
+    {'活动': '法相竞舟(玄武)', '跨服': 4, '游戏天数(开始)': 2160, '开始': '2023-12-15'},
+    {'活动': '瑶池花会', '跨服': 16, '游戏天数(开始)': 2162, '开始': '2023-12-17'},
+    {'活动': '兽渊探秘', '跨服': 16, '游戏天数(开始)': 2164, '开始': '2023-12-19'},
+    {'活动': '社团炼体', '跨服': 4, '游戏天数(开始)': 2165, '开始': '2023-12-20'},
+    {'活动': '社团丹道', '跨服': 4, '游戏天数(开始)': 2170, '开始': '2023-12-25'},
+    {'活动': '洗灵证武', '跨服': 8, '游戏天数(开始)': 2172, '开始': '2023-12-27'},
+    {'活动': '仙宴(万妖灵塔)', '跨服': 4, '游戏天数(开始)': 2175, '开始': '2023-12-30'},
+    {'活动': '天地弈局', '跨服': 8, '游戏天数(开始)': 2176, '开始': '2023-12-31'},
+]
+
 
 data = pd.DataFrame(known_events)
 today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
@@ -95,8 +119,24 @@ data['活动'] = event_names
 data['剩余天数'] = data['剩余天数'].apply(lambda x: f"{x}天")
 data = data[['活动', '剩余天数', '开始', '结束', '游戏天数(开始)', '游戏天数(结束)']]
 
+# add uncertain events
+uncertain_events_df = pd.DataFrame(uncertain_events)
+uncertain_events_df['剩余天数'] = uncertain_events_df['开始'].apply(lambda x: (datetime.strptime(x, '%Y-%m-%d') - today).days)
+
+event_names_uncertain = []
+for _tuple in uncertain_events_df[['活动', '跨服']].itertuples():
+    event_name, num_of_servers = _tuple[1], _tuple[2]
+    if num_of_servers == 1:
+        event_names_uncertain.append(f"{event_name}预赛")
+    else:
+        event_names_uncertain.append(f"{event_name}跨服[{num_of_servers}]")
+
+uncertain_events_df['活动'] = event_names_uncertain
+uncertain_events_df['剩余天数'] = uncertain_events_df['剩余天数'].apply(lambda x: f"{x}天")
+uncertain_events_df = uncertain_events_df[['活动', '剩余天数', '开始', '游戏天数(开始)']]
+
 # filter out events that are already over
-data = data[data['剩余天数'].apply(lambda x: x.split('天')[0]).astype(int) >= 0]
+# data = data[data['剩余天数'].apply(lambda x: x.split('天')[0]).astype(int) >= 0]
 
 event_col = f"活动 (当前: {datetime.strftime(today, '%Y-%m-%d')})"
 
@@ -114,3 +154,17 @@ def style_important_event(event):
         return ''
 
 data.style.applymap(style_important_event, subset=[event_col])
+
+def style_important_event_uncertain(event):
+    other_events = ['法相竞舟(天凤)跨服[4]', '法相竞舟(玄武)跨服[4]', '仙园游宴(山海套装)跨服[4]', '仙宴(万妖灵塔)跨服[4]']
+    if '社团' in event:
+        return 'color: green;' + 'font-weight: bold;'
+    elif '[16]' in event:
+        return 'color: red;' + 'font-weight: bold;'
+    elif event in other_events:
+        return 'color: blue;'  + 'font-weight: bold;'
+    else:
+        return ''
+
+uncertain_events_df = uncertain_events_df.rename(columns={'活动': event_col})
+uncertain_events_df.style.applymap(style_important_event_uncertain, subset=[event_col])
