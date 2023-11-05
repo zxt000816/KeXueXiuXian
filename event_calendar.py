@@ -79,6 +79,9 @@ known_events = [
     {'活动': '天地弈局', '跨服': 4, '开始': '2023-11-17', '结束': '2023-11-17', '游戏天数(开始)': 2132, '游戏天数(结束)': 2132},
     {'活动': '灵宠竞武', '跨服': 2, '开始': '2023-11-17', '结束': '2023-11-18', '游戏天数(开始)': 2132, '游戏天数(结束)': 2133},
     {'活动': '社团大比', '跨服': 8, '开始': '2023-11-18', '结束': '2023-11-18', '游戏天数(开始)': 2133, '游戏天数(结束)': 2133},
+    {'活动': '云梦试剑', '跨服': 4, '开始': '2023-11-19', '结束': '2023-11-19', '游戏天数(开始)': 2134, '游戏天数(结束)': 2134},
+    {'活动': '炼体法相', '跨服': 2, '开始': '2023-11-19', '结束': '2023-11-20', '游戏天数(开始)': 2134, '游戏天数(结束)': 2135},
+    {'活动': '魔道入侵', '跨服': 1, '开始': '2023-11-20', '结束': '2023-11-20', '游戏天数(开始)': 2135, '游戏天数(结束)': 2135},
 ]
 
 uncertain_events = [
@@ -136,7 +139,7 @@ uncertain_events_df['剩余天数'] = uncertain_events_df['剩余天数'].apply(
 uncertain_events_df = uncertain_events_df[['活动', '剩余天数', '开始', '游戏天数(开始)']]
 
 # filter out events that are already over
-# data = data[data['剩余天数'].apply(lambda x: x.split('天')[0]).astype(int) >= 0]
+data = data[data['剩余天数'].apply(lambda x: x.split('天')[0]).astype(int) >= 0]
 
 event_col = f"活动 (当前: {datetime.strftime(today, '%Y-%m-%d')})"
 
@@ -153,8 +156,6 @@ def style_important_event(event):
     else:
         return ''
 
-data.style.applymap(style_important_event, subset=[event_col])
-
 def style_important_event_uncertain(event):
     other_events = ['法相竞舟(天凤)跨服[4]', '法相竞舟(玄武)跨服[4]', '仙园游宴(山海套装)跨服[4]', '仙宴(万妖灵塔)跨服[4]']
     if '社团' in event:
@@ -165,6 +166,8 @@ def style_important_event_uncertain(event):
         return 'color: blue;'  + 'font-weight: bold;'
     else:
         return ''
+
+data.style.applymap(style_important_event, subset=[event_col])
 
 uncertain_events_df = uncertain_events_df.rename(columns={'活动': event_col})
 uncertain_events_df.style.applymap(style_important_event_uncertain, subset=[event_col])
