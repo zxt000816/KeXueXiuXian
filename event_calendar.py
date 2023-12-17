@@ -65,9 +65,17 @@ known_events = [
     {'活动': '魔道入侵', '跨服': 2, '开始': '2023-12-13', '结束': '2023-12-13'},
     {'活动': '社团丹道', '跨服': 4, '开始': '2023-12-13', '结束': '2023-12-14'},
     {'活动': '虚天殿', '跨服': 2, '开始': '2023-12-14', '结束': '2023-12-15'},
+    {'活动': '炼骨成圣', '跨服': 0, '开始': '2023-12-14', '结束': '2023-12-18'},
     {'活动': '洗灵证武', '跨服': 1, '开始': '2023-12-15', '结束': '2023-12-15'},
     {'活动': '洗灵证武', '跨服': 8, '开始': '2023-12-16', '结束': '2023-12-17'},
     {'活动': '升仙会', '跨服': 8, '开始': '2023-12-16', '结束': '2023-12-16'},
+    {'活动': '兽渊探秘', '跨服': 2, '开始': '2023-12-17', '结束': '2023-12-18'},
+    {'活动': '炼体法相', '跨服': 1, '开始': '2023-12-18', '结束': '2023-12-18'},
+    {'活动': '炼体法相', '跨服': 4, '开始': '2023-12-19', '结束': '2023-12-20'},
+    {'活动': '天地弈局', '跨服': 1, '开始': '2023-12-19', '结束': '2023-12-19'},
+    {'活动': '天地弈局', '跨服': 8, '开始': '2023-12-20', '结束': '2023-12-21'},
+    {'活动': '瑶池花会', '跨服': 2, '开始': '2023-12-21', '结束': '2023-12-22'},
+    {'活动': '社团大比', '跨服': 8, '开始': '2023-12-22', '结束': '2023-12-22'},
 ]
 
 uncertain_events = [
@@ -101,6 +109,8 @@ for _tuple in data[['活动', '跨服']].itertuples():
     event_name, num_of_servers = _tuple[1], _tuple[2]
     if num_of_servers == 1:
         event_names.append(f"{event_name}预赛")
+    elif num_of_servers == 0:
+        event_names.append(event_name)
     else:
         event_names.append(f"{event_name}跨服[{num_of_servers}]")
 
@@ -118,12 +128,15 @@ data = data.rename(columns={'活动': event_col})
 
 def style_important_event(event):
     other_events = ['凤相竞舟跨服[4]', '玄武相竞舟跨服[4]', '仙园游宴(万妖灵塔)跨服[4]', '仙园游宴(山海套装)跨服[4]']
+    lei_chong_events = ['炼骨成圣']
     if '社团' in event:
         return 'color: green;' + 'font-weight: bold;'
     elif '[8]' in event or '[16]' in event:
         return 'color: red;' + 'font-weight: bold;'
     elif event in other_events:
         return 'color: blue;'  + 'font-weight: bold;'
+    elif event in lei_chong_events:
+        return 'color: brown;'  + 'font-weight: bold;'
     else:
         return ''
 
